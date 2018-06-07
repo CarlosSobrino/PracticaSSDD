@@ -3,10 +3,8 @@
 
 import sys
 import Ice
-
 Ice.loadSlice('-I. --all drobots.ice')
 Ice.loadSlice('-I. --all drobotsAux.ice')
-
 import drobots
 import math
 import random

@@ -16,6 +16,16 @@ import ControllerDetector
 class FactoriaI(drobots.ControllerFactory):
 
 	def make(self, robot, tipo, jugador, container, contador, current=None, mines):
+		if(tipo == "atacante"):
+			ControladorServidor = ControllerAtacante.RobotControllerAtacanteI()
+			Controladorproxy = current.adapter.addWithUUID(ControladorServidor)
+			directProxyController = current.adapter.createDirectProxy(Controladorproxy.ice_getIdentity())
+			controlador = drobots.ControllerAtacantePrx.checkedCast(directProxyController)
+
+			key = tipo+"-"+str(contador)+"-"+jugador
+			container.linkControlador(key,controlador)
+			controlador.setRobot(robot, jugador,container, mines)
+		
 
 		if(tipo == "defensa"):
 			ControladorServidor = ControllerDefensor.RobotControllerDefensorI()
@@ -27,15 +37,6 @@ class FactoriaI(drobots.ControllerFactory):
 			container.linkControlador(key,controlador)
 			controlador.setRobot(robot, jugador, container, mines)
 
-		if(tipo == "ataque"):
-			ControladorServidor = ControllerAtacante.RobotControllerAtacanteI()
-			Controladorproxy = current.adapter.addWithUUID(ControladorServidor)
-			directProxyController = current.adapter.createDirectProxy(Controladorproxy.ice_getIdentity())
-			controlador = drobots.ControllerAtacantePrx.checkedCast(directProxyController)
-
-			key = tipo+"-"+str(contador)+"-"+jugador
-			container.linkControlador(key,controlador)
-			controlador.setRobot(robot, jugador,container, mines)
 
 		return controlador
 

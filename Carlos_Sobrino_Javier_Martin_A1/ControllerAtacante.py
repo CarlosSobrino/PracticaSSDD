@@ -44,7 +44,6 @@ class RobotControllerAtacanteI(drobots.ControllerAtacante):
 		self.angEnemigos = self.getangEnemigos()
 	
 		self.angle = self.selectangle()
-		self.comprobarMinas()
 		self.accion()
 
 		self.contTurn += 1
@@ -130,6 +129,7 @@ class RobotControllerAtacanteI(drobots.ControllerAtacante):
 
 	def getangAmigos(self, current = None):
 		angAmigos=[]
+		print("Buscar angulos donde estan los robot amigos")
 		for keys in self.amigos.keys():
 			if("atacante") in keys:
 				atac = drobots.ControllerAtacantePrx.checkedCast(self.amigos[keys])
