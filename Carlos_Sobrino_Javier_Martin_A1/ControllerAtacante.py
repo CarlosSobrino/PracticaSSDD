@@ -61,10 +61,12 @@ class RobotControllerAtacanteI(drobots.ControllerAtacante):
 	def accion(self, current = None):
 		if(self.energy > 50 and self.angle > -1):
             distancia = random.randint(1,10)*100
+            print("Disparando atacante")
             self.disparar(self.angle, distancia)
             self.energy -= 50
 
 		if(self.energy > 60):
+			print("moviendose el atacante")
 			self.moverRobot(self.location)
 			self.energy -= 60
 			
@@ -72,6 +74,7 @@ class RobotControllerAtacanteI(drobots.ControllerAtacante):
 	def getAmigos(self, current = None):
 		amigos = dict()
 		lista = self.robotControllerContainer.listController()
+		print("Buscando robot amigos")
 		for i in range(0, len(lista)):
 			keys = lista.keys()[i]
 			values = lista.values()[i]
@@ -81,6 +84,7 @@ class RobotControllerAtacanteI(drobots.ControllerAtacante):
 		return amigos
         
 	def moverRobot(self, current = None):
+
 		if(self.contTurn == 0):
 			self.robot.drive(random.randint(0,360),100)
 			self.speed = 100
@@ -106,16 +110,19 @@ class RobotControllerAtacanteI(drobots.ControllerAtacante):
 		angEnemigos=[]
 		for keys in self.amigos.keys():
 			if("defensa") in keys:
+				print("Enviando coordenadas enemigas")
 				defen = drobots.ControllerDefensorPrx.checkedCast(self.amigos[keys])
-				coordenadaXEnemigo = defen.getCoordenadaEnemigoX()
-				coordenadaYEnemigo = defen.getCoordenadaEnemigoY()
-				angle = self.calcularAngulo(coordenadaXEnemigo, coordenadaYEnemigo)
+				coordX = defen.getCoordenadaEnemigoX()
+				coordY = defen.getCoordenadaEnemigoY()
+				print("X: "+coordX+"Y: "+coordY)
+				angle = self.calcularAngulo(coordX, coordY)
 				angEnemigos.append(angle)
 
 			if("detector") in keys:
-				detector = drobots.ControllerDetectorPrx.checkedCast(self.amigos[keys])
-				posicion = detector.getEnemigo()
-				angle = self.calcularAngulo(posicion.x, posicion.y)
+				detec = drobots.ControllerDetectorPrx.checkedCast(self.amigos[keys])
+				pos = detec.getEnemigo()
+				print("Calcular posicion mediante el angulo")
+				angle = self.calcularAngulo(pos.x, pos.y)
 				angEnemigos.append(angle)
 
 		return angEnemigos
@@ -124,13 +131,13 @@ class RobotControllerAtacanteI(drobots.ControllerAtacante):
 	def getangAmigos(self, current = None):
 		angAmigos=[]
 		for keys in self.amigos.keys():
-			if("atac") in keys:
+			if("atacante") in keys:
 				atac = drobots.ControllerAtacantePrx.checkedCast(self.amigos[keys])
 				coord = atac.getPosicionAmiga()
 				angle = self.calcularAngulo(coord.x, coord.y)
 				angAmigos.append(angle)
 
-			elif("def") in keys:
+			elif("defensa") in keys:
 				defen = drobots.ControllerDefensorPrx.checkedCast(self.amigos[keys])
 				coord = defen.getPosicionAmiga()
 				angle = self.calcularAngulo(coord.x, coord.y)
@@ -139,18 +146,18 @@ class RobotControllerAtacanteI(drobots.ControllerAtacante):
 		return angAmigos
 
 
-	def calcularAngulo(self, coordenadaX, coordenadaY, current = None):
-		puntoX = math.fabs(coordenadaX - self.location.x)
-		puntoY = math.fabs(coordenadaY - self.location.y)
-		angle = int(math.degrees(math.atan2(puntoY,puntoX)))
+	def calcularAngulo(self, coordX, coordY, current = None):
+		pX = math.fabs(coordX - self.location.x)
+		pY = math.fabs(coordY - self.location.y)
+		angle = int(math.degrees(math.atan2(pY,pX)))
 		if(angle < 0):
 			angle = angle + 360
 		elif(angle >= 360):
 			angle = 0
 		return angle
 
-	def disparar(self, angle, distancia, current = None):
-        self.robot.cannon(angle, distancia)
+	def disparar(self, angle, dist, current = None):
+        self.robot.cannon(angle, dist)
         self.angle = -1
 
 

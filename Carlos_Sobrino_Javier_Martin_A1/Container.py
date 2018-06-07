@@ -6,7 +6,7 @@ import sys
 import Ice
 
 Ice.loadSlice('-I. --all drobots.ice')
-'''Ice.loadSlice('-I. --all drobotsAux.ice')'''
+Ice.loadSlice('-I. --all drobotsAux.ice')
 
 import drobots
 
@@ -25,7 +25,6 @@ class ContainerI(drobots.Container):
 
     def list(self, current=None):
         return self.proxies
-
 
 
     def linkFactory(self, key, proxy, current=None): 
