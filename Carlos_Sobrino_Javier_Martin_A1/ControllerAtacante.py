@@ -133,13 +133,13 @@ class RobotControllerAtacanteI(drobots.ControllerAtacante):
 		for keys in self.amigos.keys():
 			if("atacante") in keys:
 				atac = drobots.ControllerAtacantePrx.checkedCast(self.amigos[keys])
-				coord = atac.getPosicionAmiga()
+				coord = atac.getPosAmiga()
 				angle = self.calcularAngulo(coord.x, coord.y)
 				angAmigos.append(angle)
 
 			elif("defensa") in keys:
 				defen = drobots.ControllerDefensorPrx.checkedCast(self.amigos[keys])
-				coord = defen.getPosicionAmiga()
+				coord = defen.getPosAmiga()
 				angle = self.calcularAngulo(coord.x, coord.y)
 				angAmigos.append(angle)
 
@@ -162,7 +162,7 @@ class RobotControllerAtacanteI(drobots.ControllerAtacante):
 
 
 
-	def getPosicionAmiga(self, current = None):
+	def getPosAmiga(self, current = None):
 		location = self.robot.location()
 		return location
 

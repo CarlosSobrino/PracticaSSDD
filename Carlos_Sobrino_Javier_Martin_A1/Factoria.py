@@ -4,9 +4,8 @@
 import sys
 import Ice
 import os
-
 Ice.loadSlice('-I. --all drobots.ice')
-
+Ice.loadSlice('-I. --all drobotsAux.ice')
 import drobots
 import math
 import random
